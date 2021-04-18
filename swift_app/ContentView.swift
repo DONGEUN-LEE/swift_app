@@ -8,9 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var userAuth: UserAuth
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack{
+            if !userAuth.isLoggedin {
+                LoginView()
+            } else {
+                MainView()
+            }
+        }
+        .onAppear {
+            let token = TokenManager.shared.readToken()
+            if token != nil {
+                userAuth.login()
+            }
+        }
     }
 }
 
